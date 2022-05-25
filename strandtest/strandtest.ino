@@ -30,9 +30,9 @@ void loop() {
     String data = Serial.readString();
     int arg = data.substring(0,1).toInt();
     int percentage = data.substring(2).toInt();
-    Serial.println(percentage + ":"+ (String)(percentage / 100.0 * 255.0));
+    Serial.println(percentage);
     for (int i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, strip.Color(0, 150, (int) (percentage / 100 * 255)));
+      strip.setPixelColor(i, strip.Color(150, 150, (int) (percentage / 100 * 255)));
     }
     strip.show();
     delay(100);
