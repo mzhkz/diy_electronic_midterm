@@ -4,12 +4,13 @@ import time
 
 stacks = []
 STACK_SIZE = 5
-SERIAL_CODE = "COM3"
+SERIAL_CODE = "/dev/cu.usbmodem1432101"
 
 previous_value = 0
+previous_cpu_usage = 0
 is_increasing = 123
 
-ser = serial.Serial(SERIAL_CODE, 115200, timeout = 0.1)
+ser = serial.Serial(SERIAL_CODE, 115200, timeout = 0.5)
 time.sleep(2)
 
 
@@ -24,7 +25,12 @@ def get_single_value(previous_value, current_value):
 def main():
     global stacks, STACK_SIZE, previous_value, is_increasing
     while True:
-        percent_cpu_usage = psutil.cpu_percent(interval=1)
+        percent_cpu_usage = psutil.cpu_percent(0.1)
+        if percent_cpu_usage <= 0.0:
+            percent_cpu_usage = previous_value
+        else:
+            previous_value = percent_cpu_usage;
+
         if len(stacks) < STACK_SIZE:
             stacks.append(percent_cpu_usage)
         else:
